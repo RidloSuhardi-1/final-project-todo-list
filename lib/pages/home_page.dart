@@ -25,6 +25,121 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // Judul Aplikasi
+    var appTitle = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          'TODO',
+          style: poppinsBlack.copyWith(fontSize: 40, color: black),
+        ),
+        SizedBox(
+          width: 8,
+        ),
+        Text('LIST', style: poppinsBlack.copyWith(fontSize: 40, color: green)),
+      ],
+    );
+
+    // Teks remember me
+    var rememberMe = Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            Image.asset(
+              'assets/images/check.png',
+              width: 20,
+              height: 20,
+            ),
+            SizedBox(
+              width: 8,
+            ),
+            Text('Remember me',
+                style: poppinsRegular.copyWith(fontSize: 16, color: black)),
+          ],
+        ),
+        Text('Forgot password?',
+            style: poppinsRegular.copyWith(
+              fontSize: 16,
+              color: green,
+            )),
+      ],
+    );
+
+    // Tombol login dengan email
+    var loginEmailBtn = SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: () {},
+        child: Text(
+          'LOGIN',
+          style: poppinsBlack.copyWith(
+            fontSize: 16,
+            color: Color(0xffffffff),
+          ),
+        ),
+        style: ElevatedButton.styleFrom(
+          primary: green,
+          padding: EdgeInsets.symmetric(vertical: 12),
+        ),
+      ),
+    );
+
+    // Tombol daftar akun baru
+    var signUpBtn = Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          'Don’t have an account?',
+          style: poppinsRegular.copyWith(fontSize: 16, color: black),
+        ),
+        SizedBox(
+          width: 3,
+        ),
+        TextButton(
+          onPressed: () {},
+          child: Text(
+            'Signup here',
+            style: poppinsRegular.copyWith(
+              fontSize: 16,
+              color: green,
+            ),
+          ),
+        ),
+      ],
+    );
+
+    // Tombol login Google
+    var loginGoogleBtn = SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: () {},
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/images/google.png',
+                width: 25,
+                height: 25,
+              ),
+              SizedBox(
+                width: 15,
+              ),
+              Text(
+                'SIGN IN WITH GOOGLE',
+                style: poppinsBlack.copyWith(
+                    fontSize: 16, color: Color(0xff4285F4)),
+              ),
+            ],
+          ),
+        ),
+        style: ElevatedButton.styleFrom(
+          primary: Colors.white,
+          padding: EdgeInsets.symmetric(vertical: 12),
+        ),
+      ),
+    );
     return Scaffold(
         backgroundColor: Color(0xffFFFFFF),
         body: SingleChildScrollView(
@@ -39,28 +154,13 @@ class _HomePageState extends State<HomePage> {
                 ),
 
                 // Judul Aplikasi
+                appTitle,
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'TODO',
-                      style: poppinsBlack.copyWith(fontSize: 40, color: black),
-                    ),
-                    SizedBox(
-                      width: 8,
-                    ),
-                    Text('LIST',
-                        style:
-                            poppinsBlack.copyWith(fontSize: 40, color: green)),
-                  ],
-                ),
                 SizedBox(
                   height: 20,
                 ),
 
                 // Kolom Input - Email
-
                 textField(
                     controller: email,
                     hintText: "Enter email..",
@@ -74,7 +174,6 @@ class _HomePageState extends State<HomePage> {
                 ),
 
                 // Kolom Input - Password
-
                 textField(
                     controller: password,
                     hintText: "Enter password..",
@@ -83,123 +182,32 @@ class _HomePageState extends State<HomePage> {
                       color: green,
                     ),
                     secure: true),
+
                 SizedBox(
                   height: 20,
                 ),
 
                 // Opsi tambahan
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Image.asset(
-                          'assets/images/check.png',
-                          width: 20,
-                          height: 20,
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Text('Remember me',
-                            style: poppinsRegular.copyWith(
-                                fontSize: 16, color: black)),
-                      ],
-                    ),
-                    Text('Forgot password?',
-                        style: poppinsRegular.copyWith(
-                          fontSize: 16,
-                          color: green,
-                        )),
-                  ],
-                ),
+                rememberMe,
                 SizedBox(
                   height: 20,
                 ),
 
-                // Tombol login email
-
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    child: Text(
-                      'LOGIN',
-                      style: poppinsBlack.copyWith(
-                        fontSize: 16,
-                        color: Color(0xffffffff),
-                      ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      primary: green,
-                      padding: EdgeInsets.symmetric(vertical: 12),
-                    ),
-                  ),
-                ),
+                // Login dengan Email
+                loginEmailBtn,
 
                 SizedBox(
                   height: 3,
                 ),
 
                 // Tombol daftar akun
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Don’t have an account?',
-                      style:
-                          poppinsRegular.copyWith(fontSize: 16, color: black),
-                    ),
-                    SizedBox(
-                      width: 3,
-                    ),
-                    TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        'Signup here',
-                        style: poppinsRegular.copyWith(
-                          fontSize: 16,
-                          color: green,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                signUpBtn,
                 SizedBox(
                   height: 50,
                 ),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/images/google.png',
-                            width: 25,
-                            height: 25,
-                          ),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          Text(
-                            'SIGN IN WITH GOOGLE',
-                            style: poppinsBlack.copyWith(
-                                fontSize: 16, color: Color(0xff4285F4)),
-                          ),
-                        ],
-                      ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.white,
-                      padding: EdgeInsets.symmetric(vertical: 12),
-                    ),
-                  ),
-                ),
+
+                // Login dengan Google
+                loginGoogleBtn,
               ],
             ),
           ),
