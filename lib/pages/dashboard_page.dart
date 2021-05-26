@@ -29,10 +29,14 @@ class _DashboardPageState extends State<DashboardPage> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            Icons.menu_rounded,
-            color: black,
-            size: 25,
+          Container(
+            width: 50,
+            height: 50,
+            child: CircleAvatar(
+              backgroundImage: NetworkImage(
+                'https://d1nhio0ox7pgb.cloudfront.net/_img/o_collection_png/green_dark_grey/256x256/plain/user.png',
+              ),
+            ),
           ),
           SizedBox(
             width: 22,
@@ -54,8 +58,8 @@ class _DashboardPageState extends State<DashboardPage> {
           IconButton(
               onPressed: () {},
               icon: Icon(
-                Icons.post_add_outlined,
-                color: black,
+                Icons.logout,
+                color: Colors.red,
                 size: 25,
               )),
         ],
