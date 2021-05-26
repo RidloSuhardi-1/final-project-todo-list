@@ -1,21 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:uas_final/pages/home_page.dart';
 import 'package:uas_final/themes.dart';
 import 'package:uas_final/widgets/card_todo.dart';
+import 'package:uas_final/services/signin.dart';
 
 class DashboardPage extends StatefulWidget {
-  DashboardPage({this.name = 'no name'});
-
-  final String name;
-
   @override
-  _DashboardPageState createState() => _DashboardPageState(name: name);
+  _DashboardPageState createState() => _DashboardPageState();
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  _DashboardPageState({this.name});
-
-  String name;
-
   @override
   void initState() {
     super.initState();
@@ -34,7 +28,9 @@ class _DashboardPageState extends State<DashboardPage> {
             height: 50,
             child: CircleAvatar(
               backgroundImage: NetworkImage(
-                'https://d1nhio0ox7pgb.cloudfront.net/_img/o_collection_png/green_dark_grey/256x256/plain/user.png',
+                (imageUrl != null)
+                    ? imageUrl
+                    : 'https://d1nhio0ox7pgb.cloudfront.net/_img/o_collection_png/green_dark_grey/256x256/plain/user.png',
               ),
             ),
           ),
@@ -49,14 +45,23 @@ class _DashboardPageState extends State<DashboardPage> {
                 style: poppinsBold.copyWith(fontSize: 22, color: black),
               ),
               Text(
-                name,
+                (name != null) ? name : 'no name',
                 style: poppinsBold.copyWith(fontSize: 22, color: green),
               ),
             ],
           ),
           Spacer(),
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                // logout akun
+                signOutGoogle();
+
+                // kembali ke halaman login
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) {
+                  return HomePage();
+                }), ModalRoute.withName('/'));
+              },
               icon: Icon(
                 Icons.logout,
                 color: Colors.red,
