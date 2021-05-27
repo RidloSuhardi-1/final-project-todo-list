@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:uas_final/themes.dart';
-import 'package:uas_final/widgets/card_register.dart';
-import 'package:uas_final/widgets/email_fields.dart';
-import 'package:uas_final/widgets/password_confirm.dart';
-import 'package:uas_final/widgets/password_fields.dart';
-import 'package:uas_final/widgets/remember.dart';
+import 'package:uas_final/services/signin.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -12,9 +8,9 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController confirm = TextEditingController();
-  final _key = GlobalKey();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,11 +39,100 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ],
             ),
-            emailFields(),
-            passwordFields(),
-            confirmPaswordFields(),
-            rememberMe(),
-            registerCard(),
+            Container(
+              color: Colors.transparent,
+              margin: EdgeInsets.only(left: 30, right: 30, top: 20),
+              height: 60,
+              child: Container(
+                margin: EdgeInsets.only(left: 20),
+                alignment: Alignment.center,
+                child: new TextFormField(
+                  controller: email,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.green, width: 2)),
+                    hintText: 'Enter your email address',
+                    prefixIcon: Icon(
+                      Icons.email,
+                    ),
+                    hintStyle: poppinsRegular.copyWith(fontSize: 16),
+                  ),
+                  onChanged: (value) {},
+                ),
+              ),
+            ),
+            Container(
+              color: Colors.transparent,
+              margin: EdgeInsets.only(left: 30, right: 30, top: 10),
+              height: 60,
+              child: Container(
+                margin: EdgeInsets.only(left: 20),
+                alignment: Alignment.center,
+                child: new TextFormField(
+                  controller: password,
+                  obscureText: true,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.green, width: 2)),
+                    hintText: 'Enter your password',
+                    prefixIcon: Icon(Icons.lock),
+                    hintStyle: poppinsRegular.copyWith(fontSize: 16),
+                  ),
+                  onChanged: (value) {},
+                ),
+              ),
+            ),
+            Container(
+              color: Colors.transparent,
+              margin: EdgeInsets.only(left: 30, right: 30, top: 10),
+              height: 60,
+              child: Container(
+                margin: EdgeInsets.only(left: 20),
+                alignment: Alignment.center,
+                child: new TextFormField(
+                  controller: confirm,
+                  obscureText: true,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    hintText: 'Confirm your password',
+                    focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.green, width: 2)),
+                    prefixIcon: Icon(Icons.lock),
+                    hintStyle: poppinsRegular.copyWith(fontSize: 16),
+                  ),
+                  onChanged: (value) {},
+                ),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(left: 40, right: 40, top: 20),
+              child: ElevatedButton(
+                onPressed: () async {
+                  signUpWithEmailAndPassword(
+                          email: email.text, password: password.text)
+                      .then((result) {
+                    if (result != null) {
+                      Navigator.pop(context, result);
+                    } else {
+                      Navigator.pop(context, result);
+                    }
+                  });
+                },
+                child: Text(
+                  'Register',
+                  style: poppinsBlack.copyWith(
+                    fontSize: 16,
+                    color: Color(0xffffffff),
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  primary: Color(0XFF28D8A1),
+                  padding: EdgeInsets.symmetric(vertical: 12),
+                ),
+              ),
+            )
           ],
         ),
       ),

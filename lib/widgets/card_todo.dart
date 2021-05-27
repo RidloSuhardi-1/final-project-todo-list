@@ -24,6 +24,13 @@ class TodoCard extends StatelessWidget {
           subTitle,
           style: poppinsLight.copyWith(fontSize: 14, color: grey),
         ),
+        leading: TextButton(
+          onPressed: () {},
+          child: Icon(
+            Icons.delete_outline,
+            color: Colors.red,
+          ),
+        ),
         trailing: TextButton(
           onPressed: () {},
           child: Image.asset(

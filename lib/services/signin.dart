@@ -26,6 +26,7 @@ Future<String> signInWithGoogle() async {
   final User user = authResult.user;
 
   if (user != null) {
+    // Checking if email and name is null
     assert(user.email != null);
     assert(user.displayName != null);
     assert(user.photoURL != null);
@@ -34,6 +35,7 @@ Future<String> signInWithGoogle() async {
     email = user.email;
     imageUrl = user.photoURL;
 
+    // Only taking the first part of the name, i.e., First Name
     if (name.contains(" ")) {
       name = name.substring(0, name.indexOf(" "));
     }
@@ -44,7 +46,7 @@ Future<String> signInWithGoogle() async {
     final User currentUser = _auth.currentUser;
     assert(user.uid == currentUser.uid);
 
-    print('signInWithGoogle succeded: $user');
+    print('signInWithGoogle succeeded: $user');
 
     return '$user';
   }
@@ -52,8 +54,57 @@ Future<String> signInWithGoogle() async {
   return null;
 }
 
+Future<String> signInWithEmailAndPassword(
+    {String email, String password}) async {
+  await Firebase.initializeApp();
+  try {
+    UserCredential result = await _auth.signInWithEmailAndPassword(
+        email: email, password: password);
+
+    User user = result.user;
+
+    assert(user != null);
+    assert(await user.getIdToken() != null);
+
+    name = user.email;
+
+    if ((name).contains('@')) {
+      name = (user.email).substring(0, (name).indexOf('@'));
+    }
+
+    return name;
+  } catch (e) {
+    print(e.toString());
+    return null;
+  }
+}
+
+Future<User> signUpWithEmailAndPassword({String email, String password}) async {
+  await Firebase.initializeApp();
+
+  try {
+    UserCredential result = await _auth.createUserWithEmailAndPassword(
+        email: email, password: password);
+
+    User user = result.user;
+
+    assert(user != null);
+    assert(await user.getIdToken() != null);
+
+    return user;
+  } catch (e) {
+    print(e.toString());
+    return null;
+  }
+}
+
 Future<void> signOutGoogle() async {
+  await _auth?.signOut();
   await googleSignIn.signOut();
+
+  imageUrl = null;
+  email = null;
+  name = null;
 
   print("User Signed Out");
 }

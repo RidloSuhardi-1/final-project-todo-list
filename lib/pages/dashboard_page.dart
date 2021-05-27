@@ -47,6 +47,7 @@ class _DashboardPageState extends State<DashboardPage> {
               Text(
                 (name != null) ? name : 'no name',
                 style: poppinsBold.copyWith(fontSize: 22, color: green),
+                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),

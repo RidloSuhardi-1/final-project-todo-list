@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:uas_final/pages/dashboard_page.dart';
+import 'package:uas_final/pages/signup_page.dart';
 import 'package:uas_final/themes.dart';
+import 'package:uas_final/services/signin.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -70,7 +73,18 @@ class _HomePageState extends State<HomePage> {
     var loginEmailBtn = SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () async {
+          signInWithEmailAndPassword(email: email.text, password: password.text)
+              .then((value) => {
+                    if (value != null)
+                      {
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (context) {
+                          return DashboardPage();
+                        }))
+                      }
+                  });
+        },
         child: Text(
           'LOGIN',
           style: poppinsBlack.copyWith(
@@ -97,7 +111,11 @@ class _HomePageState extends State<HomePage> {
           width: 3,
         ),
         TextButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return SignUpPage();
+            }));
+          },
           child: Text(
             'Signup here',
             style: poppinsRegular.copyWith(
@@ -113,7 +131,15 @@ class _HomePageState extends State<HomePage> {
     var loginGoogleBtn = SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          signInWithGoogle().then((result) {
+            if (result != null) {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                return DashboardPage();
+              }));
+            }
+          });
+        },
         child: Center(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
