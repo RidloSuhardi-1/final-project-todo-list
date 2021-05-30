@@ -2,8 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 final FirebaseFirestore firestore = FirebaseFirestore.instance;
 final CollectionReference noteCollections = firestore.collection('notes');
+final CollectionReference labelCollections = firestore.collection('label');
 
 class Database {
+  // Insert data
+
   static Future<void> addNote(
       {String title = 'no title', String desc = 'no description'}) async {
     Map<String, dynamic> data = <String, dynamic>{
@@ -11,12 +14,24 @@ class Database {
       'description': desc,
     };
 
-    noteCollections.add(data);
+    await noteCollections.add(data);
+  }
+
+  static Future<void> addLabel({String name = 'no title'}) async {
+    Map<String, dynamic> data = <String, dynamic>{
+      'name': name,
+    };
+
+    await labelCollections.add(data);
+  }
+
+  // Retrieve data
+
+  static Stream<QuerySnapshot> readLabels() {
+    return labelCollections.orderBy('name', descending: true).snapshots();
   }
 
   static Stream<QuerySnapshot> readNotes() {
-    CollectionReference notesItemCollection = firestore.collection('notes');
-
-    return notesItemCollection.orderBy('title', descending: true).snapshots();
+    return noteCollections.orderBy('title', descending: true).snapshots();
   }
 }

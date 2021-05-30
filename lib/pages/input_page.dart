@@ -4,9 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:uas_final/themes.dart';
 
 class InputPage extends StatefulWidget {
-  const InputPage({this.title = '', this.desc = '', this.id});
+  const InputPage(
+      {this.title = '',
+      this.desc = '',
+      this.label = 'Direncanakan',
+      this.id,
+      this.labelId});
 
-  final String title, desc, id;
+  final String title, desc, label, id, labelId;
 
   @override
   _InputPageState createState() => _InputPageState();
@@ -14,8 +19,9 @@ class InputPage extends StatefulWidget {
 
 class _InputPageState extends State<InputPage> {
   final CollectionReference noteCollections = firestore.collection('notes');
+  final CollectionReference labelCollections = firestore.collection('label');
 
-  TextEditingController namaTugas, keterangan;
+  TextEditingController namaTugas, keterangan, label;
 
   @override
   void initState() {
@@ -23,6 +29,7 @@ class _InputPageState extends State<InputPage> {
         text: (widget.title.isNotEmpty) ? widget.title : '');
     keterangan = TextEditingController(
         text: (widget.desc.isNotEmpty) ? widget.desc : '');
+    label = TextEditingController(text: widget.label);
     super.initState();
   }
 
@@ -31,6 +38,10 @@ class _InputPageState extends State<InputPage> {
     namaTugas.dispose();
     keterangan.dispose();
     super.dispose();
+  }
+
+  void onChangeItem(String value) {
+    label.text = value;
   }
 
   @override
@@ -77,6 +88,42 @@ class _InputPageState extends State<InputPage> {
           textField(namaTugas, message: 'Nama Tugas...'),
           SizedBox(
             height: 15,
+          ),
+          Container(
+            width: double.infinity,
+            child: StreamBuilder<QuerySnapshot>(
+              stream: Database.readLabels(),
+              builder: (_, snapshot) {
+                if (snapshot.hasError) {
+                  return Text('Something went wrong');
+                }
+                if (snapshot.hasData) {
+                  return DropdownButton(
+                    onTap: () {},
+                    items: snapshot.data.docs
+                        .map((e) => DropdownMenuItem(
+                            value: e['name'], child: Text(e['name'])))
+                        .toList(),
+                    hint: Text(label.text),
+                    onChanged: (value) {
+                      setState(() => label.text = value);
+                    },
+                  );
+                } else {
+                  return DropdownButton(
+                    onTap: () {},
+                    items: <String>['Direncanakan'].map((_) {
+                      return DropdownMenuItem(
+                          value: 'Direncanakan', child: Text('Direncanakan'));
+                    }).toList(),
+                    hint: Text(label.text),
+                    onChanged: (value) {
+                      setState(() => label.text = value);
+                    },
+                  );
+                }
+              },
+            ),
           ),
           textField(keterangan, message: 'Keterangan...'),
           SizedBox(
@@ -128,6 +175,57 @@ class _InputPageState extends State<InputPage> {
         ],
       ),
     );
+
+    // Label field
+    var labelField = Container(
+      child: Column(
+        children: [
+          textField(label, message: 'Label baru...'),
+          SizedBox(
+            height: 30,
+          ),
+          Container(
+            width: double.infinity,
+
+            // Simpan data
+            child: ElevatedButton(
+              onPressed: () async {
+                if (widget.labelId != null) {
+                  await labelCollections.doc(widget.labelId).update({
+                    'name': label,
+                  });
+                } else {
+                  await Database.addLabel(name: label.text);
+                }
+              },
+              child: Text(
+                'Buat label...',
+                style: poppinsBlack.copyWith(
+                  fontSize: 16,
+                  color: Color(0xffffffff),
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                primary: green,
+                padding: EdgeInsets.symmetric(vertical: 12),
+              ),
+            ),
+          )
+        ],
+      ),
+      margin: EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(5),
+        boxShadow: [
+          BoxShadow(color: Colors.grey.withOpacity(.5), blurRadius: 2.5),
+        ],
+      ),
+    );
+
+    // MAIN
+
     return Scaffold(
       backgroundColor: Color(0XFFF0FFFF),
       body: SafeArea(
@@ -140,8 +238,9 @@ class _InputPageState extends State<InputPage> {
               ),
               inputField,
               SizedBox(
-                height: 10,
+                height: 20,
               ),
+              labelField,
             ],
           ),
         ),
