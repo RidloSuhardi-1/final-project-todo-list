@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:uas_final/pages/input_page.dart';
 import 'package:uas_final/themes.dart';
 
 class TodoCard extends StatelessWidget {
-  const TodoCard(
-      {this.id = 0,
-      this.title = 'no name',
-      this.subTitle = 'no text',
-      this.moveToPage});
+  const TodoCard(this.title, this.desc, this.id, {this.onDelete});
 
-  final String title, subTitle;
-  final int id;
-  final moveToPage;
+  final String title, desc, id;
+  final Function onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -18,21 +14,29 @@ class TodoCard extends StatelessWidget {
       elevation: 2,
       child: ListTile(
         onTap: () {},
-        title: Text(title,
+        title: Text((title == '') ? 'No title' : title,
             style: poppinsBold.copyWith(fontSize: 18, color: black)),
         subtitle: Text(
-          subTitle,
+          (desc == '') ? 'No text' : desc,
           style: poppinsLight.copyWith(fontSize: 14, color: grey),
         ),
+
+        // Delete
         leading: TextButton(
-          onPressed: () {},
+          onPressed: onDelete,
           child: Icon(
             Icons.delete_outline,
             color: Colors.red,
           ),
         ),
+
+        // Edit
         trailing: TextButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+              return InputPage(id: id, title: title, desc: desc);
+            }));
+          },
           child: Image.asset(
             'assets/images/edit.png',
             width: 20,

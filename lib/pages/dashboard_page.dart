@@ -1,8 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:uas_final/pages/home_page.dart';
+import 'package:uas_final/pages/input_page.dart';
 import 'package:uas_final/themes.dart';
 import 'package:uas_final/widgets/card_todo.dart';
 import 'package:uas_final/services/signin.dart';
+import 'package:uas_final/services/database.dart';
 
 class DashboardPage extends StatefulWidget {
   @override
@@ -10,6 +13,8 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
+  final CollectionReference noteCollections = firestore.collection('notes');
+
   @override
   void initState() {
     super.initState();
@@ -87,15 +92,41 @@ class _DashboardPageState extends State<DashboardPage> {
     var listOfCard = Expanded(
       child: Container(
         padding: EdgeInsets.all(8.0),
-        child: ListView(
-          shrinkWrap: true,
-          children: [
-            TodoCard(
-                id: 1, title: "Bahasa Indonesia", subTitle: "PR Halaman 21"),
-            TodoCard(id: 2, title: "Penjaskes", subTitle: "Scout Jump"),
-            TodoCard(
-                id: 3, title: "Main Bola", subTitle: "Jam 10 main di lapa.."),
-          ],
+        child: StreamBuilder<QuerySnapshot>(
+          stream: Database.readNotes(),
+          builder: (_, snapshot) {
+            if (snapshot.hasError) {
+              return Text('Something went wrong');
+            }
+
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Column(
+                children: [
+                  Text('Loading..'),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  CircularProgressIndicator(),
+                ],
+              );
+            }
+
+            if (snapshot.hasData) {
+              return ListView(
+                  children: snapshot.data.docs
+                      .map((e) => TodoCard(
+                            e['title'], // title
+                            e['description'], // description
+                            e.id, // id note
+                            onDelete: () {
+                              noteCollections.doc(e.id).delete();
+                            },
+                          ))
+                      .toList());
+            } else {
+              return Text('Tidak ada data');
+            }
+          },
         ),
       ),
     );
@@ -108,6 +139,9 @@ class _DashboardPageState extends State<DashboardPage> {
         children: [
           header,
           listOfCard,
+          Stack(
+            children: [Container()],
+          )
         ],
       )),
 
@@ -116,7 +150,11 @@ class _DashboardPageState extends State<DashboardPage> {
       floatingActionButton: Container(
         child: FittedBox(
           child: FloatingActionButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+                return InputPage();
+              }));
+            },
             child: Icon(Icons.post_add_outlined),
             backgroundColor: green,
             tooltip: 'Tambah catatan baru',

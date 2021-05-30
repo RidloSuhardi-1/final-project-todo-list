@@ -69,36 +69,6 @@ class _HomePageState extends State<HomePage> {
       ],
     );
 
-    // Tombol login dengan email
-    var loginEmailBtn = SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        onPressed: () async {
-          signInWithEmailAndPassword(email: email.text, password: password.text)
-              .then((value) => {
-                    if (value != null)
-                      {
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (context) {
-                          return DashboardPage();
-                        }))
-                      }
-                  });
-        },
-        child: Text(
-          'LOGIN',
-          style: poppinsBlack.copyWith(
-            fontSize: 16,
-            color: Color(0xffffffff),
-          ),
-        ),
-        style: ElevatedButton.styleFrom(
-          primary: green,
-          padding: EdgeInsets.symmetric(vertical: 12),
-        ),
-      ),
-    );
-
     // Tombol daftar akun baru
     var signUpBtn = Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -166,6 +136,37 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+
+    // Tombol login dengan email
+    var loginEmailBtn = SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: () async {
+          signInWithEmailAndPassword(email: email.text, password: password.text)
+              .then((value) => {
+                    if (value != null)
+                      {
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (context) {
+                          return DashboardPage();
+                        }))
+                      }
+                  });
+        },
+        child: Text(
+          'LOGIN',
+          style: poppinsBlack.copyWith(
+            fontSize: 16,
+            color: Color(0xffffffff),
+          ),
+        ),
+        style: ElevatedButton.styleFrom(
+          primary: green,
+          padding: EdgeInsets.symmetric(vertical: 12),
+        ),
+      ),
+    );
+
     return Scaffold(
         backgroundColor: Color(0xffFFFFFF),
         body: SingleChildScrollView(
