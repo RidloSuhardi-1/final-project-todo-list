@@ -7,8 +7,10 @@ final CollectionReference labelCollections = firestore.collection('label');
 class Database {
   // Insert data
 
+  // proses data yang diinput dari user, dan simpan ke dalam collection 'note'
   static Future<void> addNote(
       {String title = 'no title', String desc = 'no description'}) async {
+    // merubah data menjadi object
     Map<String, dynamic> data = <String, dynamic>{
       'title': title,
       'description': desc,
@@ -26,6 +28,8 @@ class Database {
   }
 
   // Retrieve data
+  // Mendapatkan kumpulan data dari collection dengan tipe kembalian stream,
+  // yang maksudnya adalah data tersebut akan ditampilkan secara dinamis.
 
   static Stream<QuerySnapshot> readLabels() {
     return labelCollections.orderBy('name', descending: true).snapshots();

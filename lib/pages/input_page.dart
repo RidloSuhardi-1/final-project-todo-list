@@ -18,6 +18,8 @@ class InputPage extends StatefulWidget {
 }
 
 class _InputPageState extends State<InputPage> {
+  // collection dari notes dan label
+
   final CollectionReference noteCollections = firestore.collection('notes');
   final CollectionReference labelCollections = firestore.collection('label');
 
@@ -25,6 +27,9 @@ class _InputPageState extends State<InputPage> {
 
   @override
   void initState() {
+    // jika tidak ada data yang dikirimkan dari dashboard (update data), maka nilainya adalah kosong
+    // jika ada maka gunakan data yang dikirimkan tadi dan masukkan ke dalam controler sesuai namanya
+
     namaTugas = TextEditingController(
         text: (widget.title.isNotEmpty) ? widget.title : '');
     keterangan = TextEditingController(
@@ -40,6 +45,7 @@ class _InputPageState extends State<InputPage> {
     super.dispose();
   }
 
+  // mengubah nilai dari label dropdown
   void onChangeItem(String value) {
     label.text = value;
   }
@@ -66,6 +72,7 @@ class _InputPageState extends State<InputPage> {
           Container(
             width: 200,
             child: Text(
+              // jika data judul kosong, defaultnya adalah catatan baru
               (widget.title == '') ? 'CATATAN BARU' : widget.title,
               overflow: TextOverflow.ellipsis,
               style: poppinsBold.copyWith(
@@ -92,6 +99,7 @@ class _InputPageState extends State<InputPage> {
           Container(
             width: double.infinity,
             child: StreamBuilder<QuerySnapshot>(
+              // menampilkan data dari firebase secara realtime
               stream: Database.readLabels(),
               builder: (_, snapshot) {
                 if (snapshot.hasError) {
@@ -105,11 +113,13 @@ class _InputPageState extends State<InputPage> {
                             value: e['name'], child: Text(e['name'])))
                         .toList(),
                     hint: Text(label.text),
+                    // jika terjadi perubahan pada dropdown, maka ganti nilainya
                     onChanged: (value) {
                       setState(() => label.text = value);
                     },
                   );
                 } else {
+                  // default dropdown dari label
                   return DropdownButton(
                     onTap: () {},
                     items: <String>['Direncanakan'].map((_) {
@@ -135,9 +145,12 @@ class _InputPageState extends State<InputPage> {
             // Simpan data
             child: ElevatedButton(
               onPressed: () async {
+                // jika tidak ada data yang dikirimkan, maka jalankan tambah data
                 if ((widget.title == '') && (widget.desc == '')) {
                   await Database.addNote(
                       title: namaTugas.text, desc: keterangan.text);
+
+                  // jika ada, maka jalankan update data
                 } else {
                   await noteCollections.doc(widget.id).update({
                     'title': namaTugas.text,
@@ -190,6 +203,7 @@ class _InputPageState extends State<InputPage> {
             // Simpan data
             child: ElevatedButton(
               onPressed: () async {
+                // simpan data label
                 if (widget.labelId != null) {
                   await labelCollections.doc(widget.labelId).update({
                     'name': label,
@@ -248,6 +262,7 @@ class _InputPageState extends State<InputPage> {
     );
   }
 
+  // textfield dinamis
   textField(TextEditingController controller,
       {String message = 'Type here..'}) {
     return TextFormField(

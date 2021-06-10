@@ -81,6 +81,7 @@ class _HomePageState extends State<HomePage> {
           width: 3,
         ),
         TextButton(
+          // ke halaman daftar dengan email
           onPressed: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
               return SignUpPage();
@@ -101,6 +102,7 @@ class _HomePageState extends State<HomePage> {
     var loginGoogleBtn = SizedBox(
       width: double.infinity,
       child: ElevatedButton(
+        // login menggunakan akun google
         onPressed: () {
           signInWithGoogle().then((result) {
             if (result != null) {
@@ -240,6 +242,8 @@ class _HomePageState extends State<HomePage> {
           ),
         ));
   }
+
+  // Textfield dinamis
 
   TextFormField textField(
       {String hintText = "Text here",

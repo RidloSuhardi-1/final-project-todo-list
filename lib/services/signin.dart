@@ -9,13 +9,18 @@ String name;
 String email;
 String imageUrl;
 
+// login menggunakan Google
 Future<String> signInWithGoogle() async {
   await Firebase.initializeApp();
 
+  // Membuka tampilan pilihan akun yang tersedia di perangkat user
   final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+
+  // melakukan autentikasi untuk mendapatkan detail infromasi user dari akun tersebut
   final GoogleSignInAuthentication googleSignInAuthentication =
       await googleSignInAccount.authentication;
 
+  // mendapatkan token
   final AuthCredential credential = GoogleAuthProvider.credential(
     accessToken: googleSignInAuthentication.accessToken,
     idToken: googleSignInAuthentication.idToken,
@@ -23,6 +28,7 @@ Future<String> signInWithGoogle() async {
 
   final UserCredential authResult =
       await _auth.signInWithCredential(credential);
+  // mengelompokkan data menjadi objek user
   final User user = authResult.user;
 
   if (user != null) {
@@ -54,6 +60,7 @@ Future<String> signInWithGoogle() async {
   return null;
 }
 
+// login menggunakan email dan password
 Future<String> signInWithEmailAndPassword(
     {String email, String password}) async {
   await Firebase.initializeApp();
@@ -79,6 +86,7 @@ Future<String> signInWithEmailAndPassword(
   }
 }
 
+// daftar menggunakan email dan pasword
 Future<User> signUpWithEmailAndPassword({String email, String password}) async {
   await Firebase.initializeApp();
 
@@ -98,6 +106,7 @@ Future<User> signUpWithEmailAndPassword({String email, String password}) async {
   }
 }
 
+// keluard dari akun
 Future<void> signOutGoogle() async {
   await _auth?.signOut();
   await googleSignIn.signOut();

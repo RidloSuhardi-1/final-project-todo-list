@@ -13,6 +13,7 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
+  // Pointer yang menghubungkan ke collection dari firebase store
   final CollectionReference noteCollections = firestore.collection('notes');
 
   @override
@@ -33,6 +34,8 @@ class _DashboardPageState extends State<DashboardPage> {
             height: 50,
             child: CircleAvatar(
               backgroundImage: NetworkImage(
+                // Jika gambar avatar user bernilai null, maka pakai gambar default dari internet.
+
                 (imageUrl != null)
                     ? imageUrl
                     : 'https://d1nhio0ox7pgb.cloudfront.net/_img/o_collection_png/green_dark_grey/256x256/plain/user.png',
@@ -50,6 +53,9 @@ class _DashboardPageState extends State<DashboardPage> {
                 style: poppinsBold.copyWith(fontSize: 22, color: black),
               ),
               Text(
+                // Jika nama user bernilai null, maka gunakan 'no name' sebagai namanya. Jika tidak
+                // gunakan nama yang tersedia dari akunnya.
+
                 (name != null) ? name : 'no name',
                 style: poppinsBold.copyWith(fontSize: 22, color: green),
                 overflow: TextOverflow.ellipsis,
@@ -93,11 +99,17 @@ class _DashboardPageState extends State<DashboardPage> {
       child: Container(
         padding: EdgeInsets.all(8.0),
         child: StreamBuilder<QuerySnapshot>(
-          stream: Database.readNotes(),
+          // Mengambil data secara realtime dari firebase
+          stream: Database
+              .readNotes(), // Ambil data dari collection 'notes' diurutkan berdasarkan title
           builder: (_, snapshot) {
+            // jika terjadi error dalam pengambilan data, maka tampilkan pesan error
+
             if (snapshot.hasError) {
               return Text('Something went wrong');
             }
+
+            // jika masih mendapatkan data, tampilkan pesan loading
 
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Column(
@@ -110,6 +122,8 @@ class _DashboardPageState extends State<DashboardPage> {
                 ],
               );
             }
+
+            // jika data berhasil didapatkan, maka tampilkan menjadi daftar card
 
             if (snapshot.hasData) {
               return ListView(
@@ -139,9 +153,6 @@ class _DashboardPageState extends State<DashboardPage> {
         children: [
           header,
           listOfCard,
-          Stack(
-            children: [Container()],
-          )
         ],
       )),
 
@@ -150,6 +161,7 @@ class _DashboardPageState extends State<DashboardPage> {
       floatingActionButton: Container(
         child: FittedBox(
           child: FloatingActionButton(
+            // pergi ke halaman input catatan
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(builder: (_) {
                 return InputPage();

@@ -39,6 +39,9 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ],
             ),
+
+            // input email
+
             Container(
               color: Colors.transparent,
               margin: EdgeInsets.only(left: 30, right: 30, top: 20),
@@ -62,6 +65,9 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ),
             ),
+
+            // input password
+
             Container(
               color: Colors.transparent,
               margin: EdgeInsets.only(left: 30, right: 30, top: 10),
@@ -84,6 +90,9 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ),
             ),
+
+            // input konfirmasi password
+
             Container(
               color: Colors.transparent,
               margin: EdgeInsets.only(left: 30, right: 30, top: 10),
@@ -106,6 +115,9 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ),
             ),
+
+            // tombol daftar
+
             Container(
               margin: EdgeInsets.only(left: 40, right: 40, top: 20),
               child: ElevatedButton(
