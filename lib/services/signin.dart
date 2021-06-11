@@ -8,6 +8,7 @@ final GoogleSignIn googleSignIn = GoogleSignIn();
 String name;
 String email;
 String imageUrl;
+String uid;
 
 // login menggunakan Google
 Future<String> signInWithGoogle() async {
@@ -40,6 +41,7 @@ Future<String> signInWithGoogle() async {
     name = user.displayName;
     email = user.email;
     imageUrl = user.photoURL;
+    uid = user.uid;
 
     // Only taking the first part of the name, i.e., First Name
     if (name.contains(" ")) {
@@ -74,6 +76,7 @@ Future<String> signInWithEmailAndPassword(
     assert(await user.getIdToken() != null);
 
     name = user.email;
+    uid = user.uid;
 
     if ((name).contains('@')) {
       name = (user.email).substring(0, (name).indexOf('@'));
@@ -114,6 +117,7 @@ Future<void> signOutGoogle() async {
   imageUrl = null;
   email = null;
   name = null;
+  uid = null;
 
   print("User Signed Out");
 }
